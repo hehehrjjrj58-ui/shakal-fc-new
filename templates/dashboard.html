@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block content %}
+<section class="card"><h2>{% if session.get('role')=='admin' %}👑 بەڕێوەبەری شاکەل{% else %}⚽ بەخێربێیت {{session.get('player_name') or session.get('username')}}{% endif %}</h2>
+<p class="small">{% if session.get('role')=='admin' %}تەنها تۆ دەتوانیت یاری و هەواڵ و یاریزان زیاد بکەیت.{% else %}ئەمە پەڕەی یاریزانە؛ دەستکارییەکان تەنها بۆ بەڕێوەبەرە.{% endif %}</p></section>
+<section class="card"><h2>🏆 یارییەکان</h2>{% for m in matches %}<div class="entry"><b>شاکەل × {{m.opponent}}</b><div>{{m.match_date}} | {{m.result}}</div><div class="small">{{m.note}}</div></div>{% else %}<p class="small">هێشتا یارییەک زیاد نەکراوە.</p>{% endfor %}</section>
+<section class="card"><h2>📰 هەواڵ</h2>{% for n in news %}<div class="entry"><b>{{n.title}}</b><p>{{n.body}}</p></div>{% else %}<p class="small">هێشتا هەواڵ نییە.</p>{% endfor %}</section>
+<section class="card"><h2>👥 یاریزانەکان</h2>{% for p in roster %}<div class="entry">{{p.name}} — ژمارە {{p.number}} — {{p.position}}</div>{% else %}<p class="small">لیستی یاریزانەکان هێشتا بەتاڵە.</p>{% endfor %}</section>
+{% if session.get('role')=='admin' %}
+<section class="card"><h2>➕ زیادکردنی یاری</h2><form method="post" action="{{url_for('add_match')}}"><input name="opponent" placeholder="ناوی یانەی بەرامبەر" required><div class="row"><input name="match_date" placeholder="بەروار / کات"><input name="result" placeholder="ئەنجام"></div><input name="note" placeholder="تێبینی"><button>زیادکردنی یاری</button></form></section>
+<section class="card"><h2>📰 زیادکردنی هەواڵ</h2><form method="post" action="{{url_for('add_news')}}"><input name="title" placeholder="ناونیشانی هەواڵ" required><textarea name="body" placeholder="ناوەڕۆکی هەواڵ" rows="3" required></textarea><button>بڵاوکردنەوە</button></form></section>
+<section class="card"><h2>👤 زیادکردنی یاریزان و هەژماری</h2><form method="post" action="{{url_for('add_player')}}"><input name="name" placeholder="ناوی یاریزان" required><div class="row"><input name="number" placeholder="ژمارەی جل"><input name="position" placeholder="پۆست"></div><input name="username" placeholder="ناوی چوونەژوورەوە" required><input name="password" type="password" placeholder="وشەی نهێنی (٨ پیت یان زیاتر)" required><button>زیادکردنی یاریزان</button></form></section>
+{% endif %}{% endblock %}
